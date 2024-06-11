@@ -1,9 +1,15 @@
 #include "Pop.h"
+#include <iostream>
 
-Pop::Pop(double money, int happiness) {
+Pop::Pop(double money, int happiness, std::string job, std::string ID) {
 	this->happiness = happiness;
 	this->money = money;
-	this->goods["food"] = 2;
+	this->goods["food"] = 3;
+	this->goods["wool"] = 3;
+	this->job = job;
+	this->needs["food"] = 3;
+	this->needs["wool"] = 3;
+	this->ID = ID;
 }
 
 int Pop::getGoodAmount(std::string good) {
@@ -11,6 +17,14 @@ int Pop::getGoodAmount(std::string good) {
 		return 0;
 	}
 	int output = this->goods[good];
+	return output;
+}
+
+int Pop::getNeedsWithGood(std::string good) {
+	if (this->needs.count(good) == 0) {
+		return 0;
+	}
+	int output = this->needs[good];
 	return output;
 }
 
@@ -61,5 +75,73 @@ int Pop::calculateHappiness() {
 	else {
 		this->happiness = this->happiness + 2;
 	}
+
+	if (this->happiness > 5) {
+		this->happiness = 5;
+	}
+	else if (this->happiness < -5) {
+		this->happiness = -5;
+	}
 	return needsUnmet;
+}
+
+int Pop::resetNeeds() {
+	for (std::map<std::string, int>::iterator itr = this->needs.begin(); itr != this->needs.end(); ++itr) {
+		this->needs[itr->first] = 3;
+	}
+	return 1;
+}
+
+int Pop::work() {
+	int happinessConstant = 1;
+	if (this->happiness < -2) {
+		happinessConstant = 1;
+	}
+	else if (this->happiness < 0) {
+		happinessConstant = 2;
+	}
+	else if (this->happiness < 3) {
+		happinessConstant = 3;
+	}
+	else if (this->happiness < 5) {
+		happinessConstant = 4;
+	}
+	else {
+		happinessConstant = 5;
+	}
+	if (this->job == "farmer") {
+		this->goods["food"] = this->goods["food"] + happinessConstant;
+	}
+	else if (this->job == "rancher") {
+		this->goods["wool"] = this->goods["wool"] + happinessConstant;
+	}
+	else {
+		return 0;
+	}
+	return 1;
+}
+
+void Pop::Tick() {
+	work();
+	supplyNeeds();
+	calculateHappiness();
+	resetNeeds();
+}
+
+int Pop::endTick() {
+	return 1;
+}
+
+void Pop::printPopInfo() {
+	std::cout << "Money: " << this->money << std::endl;
+	std::cout << "Happiness: " << this->happiness << std::endl;
+	std::cout << "Job: " << this->job << std::endl;
+	std::cout << "Goods: " << std::endl;
+	for (std::map<std::string, int>::iterator itr = this->goods.begin(); itr != this->goods.end(); ++itr) {
+		std::cout << itr->first << ": " << itr->second << std::endl;
+	}
+	std::cout << "Needs: " << std::endl;
+	for (std::map<std::string, int>::iterator itr = this->needs.begin(); itr != this->needs.end(); ++itr) {
+		std::cout << itr->first << ": " << itr->second << std::endl;
+	}
 }

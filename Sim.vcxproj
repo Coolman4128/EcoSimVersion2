@@ -128,9 +128,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Market.cpp" />
+    <ClCompile Include="Order.cpp" />
     <ClCompile Include="Pop.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Market.h" />
+    <ClInclude Include="Order.h" />
     <ClInclude Include="Pop.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
