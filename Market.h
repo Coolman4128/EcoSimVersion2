@@ -12,6 +12,8 @@ class Market {
 		void addOrder(Order* order);
 		void removePop(Pop* pop);
 		void removeOrder(Order* order);
+		Order* createOrder(double price, std::string good, int quantity, Pop* seller);
+		void TickPops();
 	private:
 		std::list<Pop*> Pops;
 		std::list<Order*> Orders;

@@ -1,7 +1,9 @@
 #include "Pop.h"
+#include "Market.h"
 #include <iostream>
 
-Pop::Pop(double money, int happiness, std::string job, std::string ID) {
+Pop::Pop(double money, int happiness, std::string job, std::string ID, Market* market = NULL) {
+	this->market = market;
 	this->happiness = happiness;
 	this->money = money;
 	this->goods["food"] = 3;
@@ -34,6 +36,44 @@ double Pop::getMoney() {
 
 int Pop::getHappiness() {
 	return this->happiness;
+}
+
+double Pop::pay(double amount) {
+	this->money = this->money + amount;
+	return this->money;
+}
+
+double Pop::spend(double amount) {
+	if (this->money < amount) {
+		return -1;
+	}
+	this->money = this->money - amount;
+	return this->money;
+}
+
+int Pop::giveGood(std::string good, int quantity) {
+	if (this->goods.count(good) == 0) {
+		this->goods[good] = quantity;
+	}
+	else {
+		this->goods[good] = this->goods[good] + quantity;
+	}
+	return this->goods[good];
+}
+
+int Pop::submitOrder(std::string good, double price, int quantity) {
+	if (this->market == NULL) {
+		return -1;
+	}
+	else if (this->goods.count(good) == 0) {
+		return -1;
+	}
+	else if (this->goods[good] < quantity) {
+		return -1;
+	}
+	this->market->createOrder(price, good, quantity, this);
+	this->goods[good] = this->goods[good] - quantity;
+	return quantity;
 }
 
 int Pop::supplyNeeds() {

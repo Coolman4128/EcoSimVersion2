@@ -1,6 +1,6 @@
 #include "Market.h"
 #include "Pop.h"
-
+#include "Order.h"
 
 Market::Market() {
 	this->popCount = 0;
@@ -13,8 +13,22 @@ void Market::addPop(Pop* pop) {
 
 void Market::createPop(double money, int happiness, std::string job) {
 	std::string ID = std::to_string(this->popCount);
-	Pop* newPop = new Pop(money, happiness, job, ID);
+	Pop* newPop = new Pop(money, happiness, job, ID, this);
 	this->addPop(newPop);
+}
+
+Order* Market::createOrder(double price, std::string good, int quantity, Pop* seller) {
+	Order* newOrder = new Order(price, good, quantity, seller);
+	this->addOrder(newOrder);
+	return newOrder;
+}
+
+void Market::TickPops() {
+	for (std::list<Pop*>::iterator it = this->Pops.begin(); it != this->Pops.end(); it++) {
+		Pop* currentPop = *it;
+		currentPop->Tick();
+		currentPop->printPopInfo();
+	}
 }
 
 void Market::addOrder(Order* order) {
