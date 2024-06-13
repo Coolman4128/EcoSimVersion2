@@ -2,6 +2,8 @@
 
 class Pop;
 
+//This class defines an order which is a request to sell a good at a certain price and quantity.
+
 class Order {
 	public:
 		Order(double price, std::string good, int quantity, Pop* seller);

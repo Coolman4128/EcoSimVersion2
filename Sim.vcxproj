@@ -130,12 +130,14 @@
     <ClCompile Include="EcoHelper.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Market.cpp" />
+    <ClCompile Include="MarketData.cpp" />
     <ClCompile Include="Order.cpp" />
     <ClCompile Include="Pop.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EcoHelper.h" />
     <ClInclude Include="Market.h" />
+    <ClInclude Include="MarketData.h" />
     <ClInclude Include="Order.h" />
     <ClInclude Include="Pop.h" />
   </ItemGroup>

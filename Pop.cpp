@@ -1,6 +1,8 @@
 #include "Pop.h"
 #include "Market.h"
 #include <iostream>
+#include "Market.h"
+#include "MarketData.h"
 
 Pop::Pop(double money, int happiness, std::string job, std::string ID, Market* market = NULL) {
 	this->market = market;
@@ -10,9 +12,13 @@ Pop::Pop(double money, int happiness, std::string job, std::string ID, Market* m
 	this->goods["wool"] = 3;
 	this->job = job;
 	this->needs["food"] = 3;
-	this->needs["wool"] = 3;
+	this->needs["wool"] = 3; //sometime soon change this to a loop that adds 3 needs to all goods in Pop::GOODS
 	this->ID = ID;
 }
+
+const int Pop::NEEDS = 3;
+
+const std::string Pop::GOODS[] = { "food", "wool" };
 
 int Pop::getGoodAmount(std::string good) {
 	if (this->goods.count(good) == 0) {
@@ -36,6 +42,10 @@ double Pop::getMoney() {
 
 int Pop::getHappiness() {
 	return this->happiness;
+}
+
+Market* Pop::getMarket() {
+	return this->market;
 }
 
 double Pop::pay(double amount) {
@@ -127,7 +137,7 @@ int Pop::calculateHappiness() {
 
 int Pop::resetNeeds() {
 	for (std::map<std::string, int>::iterator itr = this->needs.begin(); itr != this->needs.end(); ++itr) {
-		this->needs[itr->first] = 3;
+		this->needs[itr->first] = Pop::NEEDS;
 	}
 	return 1;
 }
@@ -166,6 +176,35 @@ void Pop::Tick() {
 	supplyNeeds();
 	calculateHappiness();
 	resetNeeds();
+}
+
+int Pop::buyDecision() {
+	//This function will be used to determine if a pop wants to buy something. There are 3 main criteria that will be used to determine if a pop wants to buy something:
+	//1. The pop needs the good, and will attempt to buy it if they do not have enough of it.
+	//2. The pop sees the price of the good is lower than normal and will buy it if they have enough money.
+	//3. The pop has an abundance of money
+
+
+	double costOfLiving = this->getMarket()->getMarketData()->getPriceAverage() * Pop::NEEDS * 5; // change this to a loop that adds the average price of all goods in Pop::GOODS. The 5 comes from 5 ticks.
+	
+	if (this->getNeedsWithGood("food") > 0) {
+		//submit an order to buy food for how much is needed
+	}
+	else if (this->getMoney() > costOfLiving) {
+		double remainingMoney = this->getMoney() - costOfLiving;
+		//submit an order to buy food for how much money is left over
+	}
+	
+
+	return 1;
+}
+
+int Pop::sellDecision() {
+	//This function will be used to determine if a pop wants to sell something. There are 3 main criteria that will be used to determine if a pop wants to sell something:
+	//1. The pop has an abundance of the good.
+	//2. The pop needs money.
+	//3. The pop sees the price of the good is higher than normal.
+	return 1;
 }
 
 int Pop::endTick() {

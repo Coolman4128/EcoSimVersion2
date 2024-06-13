@@ -1,5 +1,7 @@
 #include "Order.h"
 #include "Pop.h"
+#include "Market.h"
+#include "MarketData.h"
 
 Order::Order(double price, std::string good, int quantity, Pop* seller) {
 	this->price = price;
@@ -23,6 +25,12 @@ int Order::fillOrder(Pop* buyer, int quantity) {
 	buyer->spend(this->price * quantity);
 	buyer->giveGood(this->good, quantity);
 	this->quantity = this->quantity - quantity;
+	buyer->getMarket()->getMarketData()->addTransaction();
+	buyer->getMarket()->getMarketData()->addGoodsSold(quantity);
+	buyer->getMarket()->getMarketData()->updatePriceAverage(this->price);
+	if (this->quantity == 0) {
+		this->seller->getMarket()->removeOrder(this);
+	}
 	return quantity;
 }
 

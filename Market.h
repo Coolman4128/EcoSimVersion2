@@ -1,8 +1,11 @@
 #include <list>
 #include <string>
 
+// This class defines a market, which is a group of pops that interact with each other using orders. 
+
 class Pop;
 class Order;
+class MarketData;
 
 class Market {
 	public:
@@ -14,10 +17,12 @@ class Market {
 		void removeOrder(Order* order);
 		Order* createOrder(double price, std::string good, int quantity, Pop* seller);
 		void TickPops();
+		MarketData* getMarketData();
 	private:
 		std::list<Pop*> Pops;
 		std::list<Order*> Orders;
 		int popCount;
+		MarketData* marketData;
 
 
 };

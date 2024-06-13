@@ -1,9 +1,11 @@
 #include "Market.h"
 #include "Pop.h"
 #include "Order.h"
+#include "MarketData.h"
 
 Market::Market() {
 	this->popCount = 0;
+	this->marketData = new MarketData(this);
 }
 
 void Market::addPop(Pop* pop) {
@@ -44,3 +46,7 @@ void Market::removeOrder(Order* order) {
 	this->Orders.remove(order);
 }
 
+
+MarketData* Market::getMarketData() {
+	return this->marketData;
+}
